@@ -8,4 +8,8 @@ defmodule GeneratorComponent do
     </.form>
     """
   end
+
+  def input(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
+    assigns
+  end
 end
