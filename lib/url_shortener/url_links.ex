@@ -5,7 +5,10 @@ defmodule UrlShortener.UrlLinks do
     UrlLink
   }
 
-  def empty_url_link, do: %UrlLink{}
+  def empty_changeset,
+    do:
+      %UrlLink{}
+      |> UrlLink.changeset(%{})
 
   @spec new_url_link(String.t()) :: {:ok, UrlLink.t()} | {:error, String.t()}
   def new_url_link(long_url) do
