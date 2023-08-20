@@ -23,12 +23,13 @@ defmodule UrlShortenerWeb.GeneratorLive.Index do
 
   @impl Phoenix.LiveView
   def handle_event("generate_short_url", %{"long_url" => long_url}, socket) do
-    with {:ok, %{short_url_id: short_url_id}} = UrlLinks.new_url_link(long_url)
-    base = UrlShortenerWeb.Endpoint.url()
-    short_url = base <> "/" <> short_url_id
-    socket = socket |> assign(short_url: short_url)
+    with {:ok, %{short_url_id: short_url_id}} = UrlLinks.new_url_link(long_url) do
+      base = UrlShortenerWeb.Endpoint.url()
+      short_url = base <> "/" <> short_url_id
+      socket = socket |> assign(short_url: short_url)
 
-    {:noreply, socket}
+      {:noreply, socket}
+    end
   end
 
   def generator_form(%{url_link: changeset} = assigns) do

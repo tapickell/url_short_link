@@ -7,8 +7,6 @@ defmodule UrlShortener.LinkStore do
   # if neither exist store both
   use Agent
 
-  alias UrlShortener.UrlLink
-
   def start_link(initial_value \\ %{}) do
     Agent.start_link(fn -> initial_value end, name: __MODULE__)
   end
@@ -18,7 +16,8 @@ defmodule UrlShortener.LinkStore do
     |> Map.get(short_url_id)
   end
 
-  def save_link(%UrlLink{errors: []} = url_link) do
+  def save_link(%Ecto.Changeset{errors: []} = url_link_changeset) do
+    url_link = Ecto.Changeset.apply_changes(url_link_changeset)
     store = Agent.get(__MODULE__, & &1)
 
     if not url_link_exists?(store, url_link) do
@@ -26,14 +25,20 @@ defmodule UrlShortener.LinkStore do
         store_new_url_lnk(store, url_link)
       end)
     end
-  end
-  def save_link(%UrlLink{} = url_link) do
 
-  def url_link_exists?(store, url_link) do
-    Map.has_key?(url_link.long_url) || Map.has_key?(url_link.short_url_id)
+    {:ok, url_link}
   end
 
-  def store_new_url_lnk(store, url_link) do
+  def save_link(%{errors: errors, valid?: false}) do
+    {:error, errors}
+  end
+
+  defp url_link_exists?(store, url_link) do
+    Map.has_key?(store, url_link.short_url_id) ||
+      Map.has_key?(store, url_link.long_url)
+  end
+
+  defp store_new_url_lnk(store, url_link) do
     store
     |> Map.put(url_link.short_url_id, url_link)
     |> Map.put(url_link.long_url, url_link)

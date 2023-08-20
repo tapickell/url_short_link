@@ -1,5 +1,6 @@
 defmodule UrlShortener.UrlLinks do
   alias UrlShortener.{
+    LinkStore,
     UrlGenerator,
     UrlLink
   }

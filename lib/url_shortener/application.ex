@@ -15,9 +15,10 @@ defmodule UrlShortener.Application do
       # Start Finch
       {Finch, name: UrlShortener.Finch},
       # Start the Endpoint (http/https)
-      UrlShortenerWeb.Endpoint
+      UrlShortenerWeb.Endpoint,
       # Start a worker by calling: UrlShortener.Worker.start_link(arg)
       # {UrlShortener.Worker, arg}
+      {UrlShortener.LinkStore, %{}}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
