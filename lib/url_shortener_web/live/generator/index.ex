@@ -63,14 +63,6 @@ defmodule UrlShortenerWeb.GeneratorLive.Index do
         <%= @short_url %>
       </a>
     </div>
-    <div class="p-2 m-2">
-      <clipboard-copy
-        for="short-url-link"
-        class="p-2 mt-2 bg-cyan-500 rounded-lg btn btn-sm BtnGroup-item"
-      >
-        Copy URL
-      </clipboard-copy>
-    </div>
     """
   end
 end
