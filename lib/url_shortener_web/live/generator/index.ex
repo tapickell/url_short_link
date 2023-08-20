@@ -27,7 +27,7 @@ defmodule UrlShortenerWeb.GeneratorLive.Index do
 
   @impl Phoenix.LiveView
   def handle_event("generate_short_url", %{"url_link" => %{"long_url" => long_url}}, socket) do
-    with {:ok, %{short_url_id: short_url_id}} = UrlLinks.new_url_link(long_url) do
+    with {:ok, %{short_url_id: short_url_id}} = url_link = UrlLinks.new_url_link(long_url) do
       base = UrlShortenerWeb.Endpoint.url()
       short_url = base <> "/" <> short_url_id
       socket = socket |> assign(short_url: short_url)
@@ -42,14 +42,35 @@ defmodule UrlShortenerWeb.GeneratorLive.Index do
     ~H"""
     <.form for={@changeset} class={@class} id={@id} phx-submit="generate_short_url">
       <.input field={@changeset[:long_url]} />
-      <input type="submit" value="Generate Short Url" />
+      <input
+        class="shadow-lg border-slate-300	 bg-green-500 rounded-lg p-2 mt-2"
+        type="submit"
+        value="Generate Short Url"
+      />
     </.form>
     """
   end
 
   def short_url(assigns) do
     ~H"""
-    <h2><%= @short_url %></h2>
+    <div class="p-2 m-2">
+      <a
+        href={@short_url}
+        id="short-url-link"
+        class="underline decoration-blue-500 text-blue-500"
+        target="_blank"
+      >
+        <%= @short_url %>
+      </a>
+    </div>
+    <div class="p-2 m-2">
+      <clipboard-copy
+        for="short-url-link"
+        class="p-2 mt-2 bg-cyan-500 rounded-lg btn btn-sm BtnGroup-item"
+      >
+        Copy URL
+      </clipboard-copy>
+    </div>
     """
   end
 end
